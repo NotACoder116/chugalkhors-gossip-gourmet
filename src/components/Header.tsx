@@ -1,12 +1,21 @@
 
 import { useState } from 'react';
-import { Menu, X, ShoppingCart, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Menu, X, Instagram, Facebook, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import CartDrawer from '@/components/CartDrawer';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -36,20 +45,17 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Home</a>
-            <a href="#about" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">About Us</a>
-            <a href="#menu" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Menu</a>
-            <a href="#chefs" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Chefs</a>
-            <a href="#testimonials" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Reviews</a>
-            <a href="#contact" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Contact</a>
+            <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Home</button>
+            <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">About Us</button>
+            <button onClick={() => scrollToSection('menu')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Menu</button>
+            <button onClick={() => scrollToSection('chefs')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Chefs</button>
+            <button onClick={() => scrollToSection('testimonials')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Reviews</button>
+            <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Contact</button>
           </div>
 
           {/* Cart and Mobile Menu */}
           <div className="flex items-center space-x-4">
-            <Button className="relative bg-chugal-red hover:bg-red-600 text-white">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="absolute -top-2 -right-2 bg-chugal-green text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-            </Button>
+            <CartDrawer />
             
             {/* Mobile Menu Button */}
             <Button
@@ -66,12 +72,12 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 py-4 border-t animate-fade-in">
             <div className="flex flex-col space-y-4">
-              <a href="#home" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">Home</a>
-              <a href="#about" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">About Us</a>
-              <a href="#menu" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">Menu</a>
-              <a href="#chefs" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">Chefs</a>
-              <a href="#testimonials" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">Reviews</a>
-              <a href="#contact" className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2">Contact</a>
+              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Home</button>
+              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">About Us</button>
+              <button onClick={() => scrollToSection('menu')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Menu</button>
+              <button onClick={() => scrollToSection('chefs')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Chefs</button>
+              <button onClick={() => scrollToSection('testimonials')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Reviews</button>
+              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Contact</button>
             </div>
           </div>
         )}

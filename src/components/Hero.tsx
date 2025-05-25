@@ -2,6 +2,13 @@
 import { Button } from '@/components/ui/button';
 
 const Hero = () => {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="home" className="relative min-h-screen bg-gradient-to-br from-chugal-beige to-chugal-lightBeige overflow-hidden">
       {/* Background Image */}
@@ -56,6 +63,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="bg-chugal-red hover:bg-red-600 text-white px-8 py-4 text-lg font-semibold hover-scale"
+              onClick={() => scrollToSection('menu')}
             >
               🛒 Order Now
             </Button>
@@ -63,6 +71,7 @@ const Hero = () => {
               size="lg" 
               variant="outline" 
               className="border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white px-8 py-4 text-lg font-semibold hover-scale"
+              onClick={() => scrollToSection('menu')}
             >
               📖 View Menu
             </Button>
