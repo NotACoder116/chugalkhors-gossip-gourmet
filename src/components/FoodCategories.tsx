@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { ShoppingCart, Star, Plus, Minus } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
-import FoodDetailDialog from '@/components/FoodDetailDialog';
+import { useNavigate } from 'react-router-dom';
 
 const categories = [
   { id: 'all', name: 'All', emoji: '🍽️' },
@@ -311,6 +311,7 @@ const foodItems = [
 const FoodCategories = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const { cart, addToCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   const filteredItems = activeCategory === 'all' 
     ? foodItems 
@@ -327,6 +328,10 @@ const FoodCategories = () => {
         className={`w-4 h-4 ${i < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
       />
     ));
+  };
+
+  const handleFoodClick = (itemId: number) => {
+    navigate(`/food/${itemId}`);
   };
 
   return (
@@ -362,8 +367,103 @@ const FoodCategories = () => {
           ))}
         </div>
 
-        {/* Food Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Mobile Carousel View */}
+        <div className="block md:hidden mb-8">
+          <Carousel className="w-full">
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {filteredItems.map((item, index) => {
+                const cartItem = cart.find(cartItem => cartItem.id === item.id);
+                const quantity = cartItem?.quantity || 0;
+
+                return (
+                  <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-4/5">
+                    <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 shadow-lg">
+                      <div 
+                        className="relative cursor-pointer"
+                        onClick={() => handleFoodClick(item.id)}
+                      >
+                        <img 
+                          src={item.image} 
+                          alt={item.name}
+                          className="w-full h-40 object-cover"
+                        />
+                        {item.isSpecial && (
+                          <div className="absolute top-2 left-2 bg-chugal-red text-white px-2 py-1 rounded-full text-xs font-semibold">
+                            ⭐ Special
+                          </div>
+                        )}
+                        <div className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-lg">
+                          {item.isVeg ? '🌱' : '🍗'}
+                        </div>
+                      </div>
+                      
+                      <CardContent className="p-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
+                          <span className="text-lg font-bold text-chugal-red">₹{item.price}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-1 mb-2">
+                          {renderStars(item.rating)}
+                          <span className="text-xs text-gray-500 ml-1">({item.rating})</span>
+                        </div>
+                        
+                        <p className="text-gray-600 mb-3 text-xs leading-relaxed line-clamp-2">{item.description}</p>
+                        
+                        {quantity > 0 ? (
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updateQuantity(item.id, quantity - 1);
+                                }}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="font-semibold">{quantity}</span>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updateQuantity(item.id, quantity + 1);
+                                }}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
+                            <span className="font-semibold text-chugal-red text-sm">₹{item.price * quantity}</span>
+                          </div>
+                        ) : (
+                          <Button 
+                            className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-2 text-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              addToCart(item);
+                            }}
+                          >
+                            <ShoppingCart className="w-3 h-3 mr-1" />
+                            Add to Cart
+                          </Button>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+
+        {/* Desktop Grid View */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item, index) => {
             const cartItem = cart.find(cartItem => cartItem.id === item.id);
             const quantity = cartItem?.quantity || 0;
@@ -374,23 +474,24 @@ const FoodCategories = () => {
                 className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover-scale animate-fade-in border-0 shadow-lg"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <FoodDetailDialog item={item}>
-                  <div className="relative cursor-pointer">
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      className="w-full h-48 object-cover"
-                    />
-                    {item.isSpecial && (
-                      <div className="absolute top-4 left-4 bg-chugal-red text-white px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in">
-                        ⭐ Chef's Special
-                      </div>
-                    )}
-                    <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg">
-                      {item.isVeg ? '🌱' : '🍗'}
+                <div 
+                  className="relative cursor-pointer"
+                  onClick={() => handleFoodClick(item.id)}
+                >
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    className="w-full h-48 object-cover"
+                  />
+                  {item.isSpecial && (
+                    <div className="absolute top-4 left-4 bg-chugal-red text-white px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in">
+                      ⭐ Chef's Special
                     </div>
+                  )}
+                  <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg">
+                    {item.isVeg ? '🌱' : '🍗'}
                   </div>
-                </FoodDetailDialog>
+                </div>
                 
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-3">
@@ -421,7 +522,10 @@ const FoodCategories = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, quantity - 1)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateQuantity(item.id, quantity - 1);
+                          }}
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -429,7 +533,10 @@ const FoodCategories = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => updateQuantity(item.id, quantity + 1)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateQuantity(item.id, quantity + 1);
+                          }}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -439,7 +546,10 @@ const FoodCategories = () => {
                   ) : (
                     <Button 
                       className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-3 transition-all duration-300"
-                      onClick={() => addToCart(item)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(item);
+                      }}
                     >
                       <ShoppingCart className="w-4 h-4 mr-2" />
                       Add to Cart
