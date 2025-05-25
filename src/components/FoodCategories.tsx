@@ -339,9 +339,7 @@ const FoodCategories = () => {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            What's Cooking? 👨‍🍳
-          </h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-8">What's Cooking?</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Every dish has a story, every bite starts a conversation. 
             Pick your poison and let the gossip begin!
@@ -353,16 +351,14 @@ const FoodCategories = () => {
           {categories.map((category) => (
             <Button
               key={category.id}
-              variant={activeCategory === category.id ? "default" : "outline"}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-scale ${
+              onClick={() => setActiveCategory(category.id)}
+              className={`${
                 activeCategory === category.id
                   ? 'bg-chugal-red text-white'
-                  : 'border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white'
-              }`}
-              onClick={() => setActiveCategory(category.id)}
+                  : 'bg-white text-gray-900 hover:bg-gray-100'
+              } px-6 py-2 rounded-full font-semibold transition-colors`}
             >
-              <span className="mr-2">{category.emoji}</span>
-              {category.name}
+              {category.emoji} {category.name}
             </Button>
           ))}
         </div>
@@ -399,7 +395,7 @@ const FoodCategories = () => {
                       
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start mb-2">
-                          <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
+                          <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
                           <span className="text-lg font-bold text-chugal-red">₹{item.price}</span>
                         </div>
                         
@@ -408,7 +404,7 @@ const FoodCategories = () => {
                           <span className="text-xs text-gray-500 ml-1">({item.rating})</span>
                         </div>
                         
-                        <p className="text-gray-600 mb-3 text-xs leading-relaxed line-clamp-2">{item.description}</p>
+                        <p className="text-gray-700 mb-3 text-xs leading-relaxed line-clamp-2">{item.description}</p>
                         
                         {quantity > 0 ? (
                           <div className="flex items-center justify-between">
@@ -495,7 +491,7 @@ const FoodCategories = () => {
                 
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
+                    <h3 className="text-xl font-bold text-gray-900">{item.name}</h3>
                     <span className="text-2xl font-bold text-chugal-red">₹{item.price}</span>
                   </div>
                   
@@ -504,15 +500,18 @@ const FoodCategories = () => {
                     <span className="text-sm text-gray-500 ml-1">({item.rating})</span>
                   </div>
                   
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">{item.description}</p>
+                  <p className="text-gray-700 mb-4 text-sm leading-relaxed">{item.description}</p>
                   
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-500">Spice Level:</span>
-                      <span>{renderSpiceLevel(item.spiceLevel)}</span>
-                    </div>
-                    <div className="text-sm text-gray-500">
-                      {item.isVeg ? 'Vegetarian' : 'Non-Vegetarian'}
+                    <div className="flex items-center">
+                      {item.isVeg ? (
+                        <span className="text-green-600 font-semibold">Veg</span>
+                      ) : (
+                        <span className="text-red-600 font-semibold">Non-veg</span>
+                      )}
+                      <div className="ml-4 flex items-center">
+                        {renderSpiceLevel(item.spiceLevel)}
+                      </div>
                     </div>
                   </div>
                   

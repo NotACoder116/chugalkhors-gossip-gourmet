@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Menu, X, Instagram, Facebook, Twitter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -45,12 +44,12 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
-            <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Home</button>
-            <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">About Us</button>
-            <button onClick={() => scrollToSection('menu')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Menu</button>
-            <button onClick={() => scrollToSection('chefs')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Chefs</button>
-            <button onClick={() => scrollToSection('testimonials')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Reviews</button>
-            <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold">Contact</button>
+            <button onClick={() => scrollToSection('home')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">Home</button>
+            <button onClick={() => scrollToSection('about')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">About Us</button>
+            <button onClick={() => scrollToSection('menu')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">Menu</button>
+            <button onClick={() => scrollToSection('chefs')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">Chefs</button>
+            <button onClick={() => scrollToSection('testimonials')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">Reviews</button>
+            <button onClick={() => scrollToSection('contact')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold">Contact</button>
           </div>
 
           {/* Cart and Mobile Menu */}
@@ -72,12 +71,12 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 py-4 border-t animate-fade-in">
             <div className="flex flex-col space-y-4">
-              <button onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Home</button>
-              <button onClick={() => scrollToSection('about')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">About Us</button>
-              <button onClick={() => scrollToSection('menu')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Menu</button>
-              <button onClick={() => scrollToSection('chefs')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Chefs</button>
-              <button onClick={() => scrollToSection('testimonials')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Reviews</button>
-              <button onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Contact</button>
+              <button onClick={() => scrollToSection('home')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Home</button>
+              <button onClick={() => scrollToSection('about')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">About Us</button>
+              <button onClick={() => scrollToSection('menu')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Menu</button>
+              <button onClick={() => scrollToSection('chefs')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Chefs</button>
+              <button onClick={() => scrollToSection('testimonials')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Reviews</button>
+              <button onClick={() => scrollToSection('contact')} className="text-gray-900 dark:text-gray-100 hover:text-chugal-red transition-colors font-semibold py-2 text-left">Contact</button>
             </div>
           </div>
         )}
