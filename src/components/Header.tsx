@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, Instagram, Facebook, Twitter, ArrowUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -59,7 +58,7 @@ const Header = () => {
             {/* Logo */}
             <div className="flex items-center space-x-3 cursor-pointer" onClick={() => scrollToSection('home')}>
               <img 
-                src="/assets/images/chugalkhors-logo.png" 
+                src="/assets/images/logo.png" 
                 alt="Chugalkhors Logo" 
                 className="h-12 w-auto hover:scale-105 transition-transform"
               />
