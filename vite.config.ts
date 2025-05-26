@@ -1,6 +1,5 @@
-
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
@@ -10,19 +9,18 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      overlay: true
-    },
     watch: {
-      usePolling: true,
-      interval: 100
-    }
+      usePolling: true, // Forces file change detection
+    },
+    fs: {
+      strict: false,
+    },
+    hmr: {
+      overlay: true,
+    },
   },
   plugins: [
-    react({
-      // Enable fast refresh
-      fastRefresh: true,
-    }),
+    react(),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -31,11 +29,4 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Ensure proper file extensions are resolved
-  optimizeDeps: {
-    include: ['react', 'react-dom']
-  },
-  build: {
-    sourcemap: true
-  }
 }));

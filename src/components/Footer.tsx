@@ -52,7 +52,7 @@ const Footer = () => {
               </div>
               <div>
                 <h5 className="font-semibold text-chugal-green mb-2">📞 Phone</h5>
-                <p className="text-gray-300 text-sm">+91 98765 43210</p>
+                {/* <p className="text-gray-300 text-sm">+91 98765 43210</p> */}
               </div>
               <div>
                 <h5 className="font-semibold text-chugal-green mb-2">✉️ Email</h5>

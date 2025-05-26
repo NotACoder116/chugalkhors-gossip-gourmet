@@ -17,7 +17,7 @@ const About = () => {
             </p>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                It all started when Rajesh and Priya realized that the best conversations 
+                It all started when Rajan and Priya realized that the best conversations 
                 happen over good food. They noticed how their friends would gather at their 
                 tiny kitchen, sharing stories, secrets, and endless chatter while munching 
                 on homemade delicacies.

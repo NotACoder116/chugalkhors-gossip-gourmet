@@ -42,7 +42,7 @@ const Header = () => {
           <div className="container mx-auto flex justify-between items-center text-sm">
             <div className="flex items-center gap-4">
               <span>🕒 Open: 9:00 AM - 11:00 PM</span>
-              <span className="hidden md:inline">📞 +91 98765 43210</span>
+              {/* <span className="hidden md:inline">📞 +91 98765 43210</span> */}
             </div>
             <div className="flex items-center gap-3">
               <Instagram className="w-4 h-4 cursor-pointer hover:scale-110 transition-transform hover:text-pink-300" />

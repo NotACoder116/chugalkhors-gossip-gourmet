@@ -5,17 +5,17 @@ import { Instagram, Facebook, Twitter } from 'lucide-react';
 const chefs = [
   {
     id: 1,
-    name: 'Chef Rajesh Kumar',
+    name: 'Chef Rajan Kumar',
     title: 'Head Gossip Chef',
     image: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    bio: 'Master of spices and stories. Rajesh can whip up a curry and a conversation with equal skill!',
+    bio: 'Master of spices and stories. Rajan can whip up a curry and a conversation with equal skill!',
     speciality: 'North Indian & Punjabi Cuisine',
     experience: '15 Years',
     signature: 'Butter Chicken that makes people cry happy tears',
     social: {
-      instagram: '@chef_rajesh_gossips',
-      facebook: 'Chef Rajesh Kumar',
-      twitter: '@rajesh_cooks'
+      instagram: '@chef_rajan_gossips',
+      facebook: 'Chef Rajan Kumar',
+      twitter: '@rajan_cooks'
     }
   },
   {
@@ -144,7 +144,7 @@ const Chefs = () => {
                 <p className="text-gray-700 italic">
                   "Cooking is like storytelling - you need the right ingredients, perfect timing, 
                   and a pinch of drama to make it memorable!" 
-                  <span className="block mt-2 text-chugal-red font-semibold">- Chef Rajesh</span>
+                  <span className="block mt-2 text-chugal-red font-semibold">- Chef Rajan</span>
                 </p>
               </div>
               
