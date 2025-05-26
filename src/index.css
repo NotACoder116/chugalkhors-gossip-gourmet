@@ -92,10 +92,32 @@
     background-color: rgb(255, 255, 255) !important;
   }
 
-  /* Fix any yellow backgrounds */
+  /* Fix any yellow backgrounds - force them to white or green */
   .bg-yellow-50,
   .bg-yellow-100,
-  .bg-yellow-200 {
+  .bg-yellow-200,
+  .bg-yellow-300,
+  .bg-yellow-400,
+  .bg-yellow-500 {
+    background-color: rgb(255, 255, 255) !important;
+  }
+
+  /* Fix any pink backgrounds - force them to white */
+  .bg-pink-50,
+  .bg-pink-100,
+  .bg-pink-200,
+  .bg-pink-300,
+  .bg-pink-400,
+  .bg-pink-500 {
+    background-color: rgb(255, 255, 255) !important;
+  }
+
+  /* Override any system colors that might cause yellow/pink */
+  [style*="background-color: yellow"],
+  [style*="background-color: #ffff"],
+  [style*="background-color: #ffd"],
+  [style*="background-color: pink"],
+  [style*="background-color: #ffc0cb"] {
     background-color: rgb(255, 255, 255) !important;
   }
 }
@@ -140,6 +162,29 @@
 
   .text-gray-900 {
     color: rgb(17, 24, 39) !important;
+  }
+
+  /* Category button overrides */
+  .category-button {
+    @apply bg-white text-gray-700 border border-gray-200 hover:bg-chugal-green hover:text-white transition-all duration-200;
+  }
+
+  .category-button.active {
+    @apply bg-chugal-green text-white border-chugal-green;
+  }
+
+  /* Card overrides to prevent yellow/pink */
+  .food-card {
+    @apply bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300;
+  }
+
+  .testimonial-card {
+    @apply bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300;
+  }
+
+  /* Offer card overrides */
+  .offer-card {
+    @apply bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300;
   }
 }
 

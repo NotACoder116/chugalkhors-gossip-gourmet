@@ -415,11 +415,9 @@ const FoodCategories = () => {
             <Button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`${
-                activeCategory === category.id
-                  ? 'bg-chugal-red text-white shadow-lg'
-                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
-              } px-4 py-2 rounded-full font-medium transition-all duration-200 hover:shadow-md`}
+              className={`category-button ${
+                activeCategory === category.id ? 'active' : ''
+              } px-4 py-2 rounded-full font-medium`}
             >
               {category.emoji} {category.name}
             </Button>
@@ -435,7 +433,7 @@ const FoodCategories = () => {
 
                 return (
                   <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-4/5">
-                    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-white border border-gray-100">
+                    <Card className="food-card overflow-hidden">
                       <div 
                         className="relative cursor-pointer"
                         onClick={() => handleFoodClick(item.id)}
@@ -452,7 +450,7 @@ const FoodCategories = () => {
                         )}
                         <Badge 
                           className={`absolute top-2 right-2 ${
-                            item.isVeg ? 'bg-green-500' : 'bg-red-500'
+                            item.isVeg ? 'bg-chugal-green' : 'bg-chugal-red'
                           } text-white`}
                         >
                           {item.isVeg ? '🌱' : '🍗'}
@@ -503,7 +501,7 @@ const FoodCategories = () => {
                           </div>
                         ) : (
                           <Button 
-                            className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-2 text-sm transition-all duration-200"
+                            className="w-full bg-chugal-green text-white font-semibold py-2 text-sm transition-all duration-200"
                             onClick={(e) => {
                               e.stopPropagation();
                               addToCart(item);
@@ -532,7 +530,7 @@ const FoodCategories = () => {
             return (
               <Card 
                 key={item.id} 
-                className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white border border-gray-100 animate-fade-in"
+                className="food-card overflow-hidden hover:-translate-y-1 animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div 
@@ -551,7 +549,7 @@ const FoodCategories = () => {
                   )}
                   <Badge 
                     className={`absolute top-4 right-4 ${
-                      item.isVeg ? 'bg-green-500' : 'bg-red-500'
+                      item.isVeg ? 'bg-chugal-green' : 'bg-chugal-red'
                     } text-white font-medium`}
                   >
                     {item.isVeg ? '🌱 Veg' : '🍗 Non-Veg'}
@@ -611,7 +609,7 @@ const FoodCategories = () => {
                     </div>
                   ) : (
                     <Button 
-                      className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-3 transition-all duration-200 hover:shadow-lg"
+                      className="w-full bg-chugal-green text-white font-semibold py-3 transition-all duration-200 hover:shadow-lg"
                       onClick={(e) => {
                         e.stopPropagation();
                         addToCart(item);

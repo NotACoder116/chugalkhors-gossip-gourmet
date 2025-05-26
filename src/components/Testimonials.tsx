@@ -95,7 +95,7 @@ const Testimonials = () => {
 
         {/* Main Testimonial Carousel */}
         <div className="relative max-w-4xl mx-auto mb-16">
-          <Card className="overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-white to-chugal-lightBeige">
+          <Card className="testimonial-card overflow-hidden shadow-2xl bg-gradient-to-br from-white to-chugal-lightBeige">
             <CardContent className="p-8 md:p-12">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 {/* Customer Image */}
@@ -151,10 +151,10 @@ const Testimonials = () => {
           {testimonials.slice(0, 3).map((testimonial, index) => (
             <Card 
               key={testimonial.id}
-              className="hover:shadow-xl transition-all duration-300 hover-scale border-0 shadow-lg animate-fade-in"
+              className="testimonial-card hover:-translate-y-1 animate-fade-in"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <CardContent className="p-6">
+              <CardContent className="p-6 bg-white">
                 <div className="flex items-center gap-4 mb-4">
                   <img 
                     src={testimonial.image}
@@ -209,7 +209,7 @@ const Testimonials = () => {
 
         {/* CTA Section */}
         <div className="mt-16 text-center">
-          <div className="chat-bubble max-w-2xl mx-auto mb-8">
+          <div className="chat-bubble max-w-2xl mx-auto mb-8 bg-white">
             <p className="text-gray-700 text-lg">
               🌟 <strong>Your turn!</strong> Come create your own story at Chugalkhors. 
               We can't wait to hear what you have to say about us!
