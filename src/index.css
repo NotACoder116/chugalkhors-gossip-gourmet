@@ -99,7 +99,7 @@
   .bg-yellow-300,
   .bg-yellow-400,
   .bg-yellow-500 {
-    background-color: rgb(255, 255, 255) !important;
+    background-color: rgb(24, 57, 27) !important;
   }
 
   /* Fix any pink backgrounds - force them to white */
@@ -113,10 +113,10 @@
   }
 
   /* Override any system colors that might cause yellow/pink */
-  [style*="background-color: yellow"],
+  [style*="background-color: white"],
   [style*="background-color: #ffff"],
   [style*="background-color: #ffd"],
-  [style*="background-color: pink"],
+  [style*="background-color: white"],
   [style*="background-color: #ffc0cb"] {
     background-color: rgb(255, 255, 255) !important;
   }
