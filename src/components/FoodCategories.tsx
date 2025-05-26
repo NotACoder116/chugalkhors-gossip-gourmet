@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { ShoppingCart, Star, Plus, Minus } from 'lucide-react';
+import { ShoppingCart, Star, Plus, Minus, Search, Filter } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -69,7 +72,6 @@ const foodItems = [
       { user: 'Maya P.', comment: 'Perfect for a quick snack. Love the filling!', rating: 4 }
     ]
   },
-
   // Beverages
   {
     id: 4,
@@ -120,7 +122,6 @@ const foodItems = [
       { user: 'Richa S.', comment: 'So refreshing! Love the fruit combination.', rating: 5 }
     ]
   },
-
   // Chinese
   {
     id: 7,
@@ -170,7 +171,6 @@ const foodItems = [
       { user: 'Pooja L.', comment: 'Good portion size and tasty!', rating: 4 }
     ]
   },
-
   // Pizza
   {
     id: 10,
@@ -204,7 +204,6 @@ const foodItems = [
       { user: 'Anita M.', comment: 'Simple and delicious! Love the fresh basil.', rating: 4 }
     ]
   },
-
   // Pasta
   {
     id: 12,
@@ -238,7 +237,6 @@ const foodItems = [
       { user: 'Kavya N.', comment: 'Rich and creamy! Authentic taste.', rating: 4 }
     ]
   },
-
   // Non-Veg
   {
     id: 14,
@@ -272,7 +270,6 @@ const foodItems = [
       { user: 'Manish K.', comment: 'Perfectly marinated and grilled! Must try.', rating: 5 }
     ]
   },
-
   // Desserts
   {
     id: 16,
@@ -310,12 +307,34 @@ const foodItems = [
 
 const FoodCategories = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('featured');
+  const [dietFilter, setDietFilter] = useState('all');
+  const [isLoading, setIsLoading] = useState(false);
   const { cart, addToCart, updateQuantity } = useCart();
   const navigate = useNavigate();
 
-  const filteredItems = activeCategory === 'all' 
-    ? foodItems 
-    : foodItems.filter(item => item.category === activeCategory);
+  // Filter and sort items
+  let filteredItems = foodItems.filter(item => {
+    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDiet = dietFilter === 'all' || 
+                       (dietFilter === 'veg' && item.isVeg) ||
+                       (dietFilter === 'nonveg' && !item.isVeg);
+    return matchesCategory && matchesSearch && matchesDiet;
+  });
+
+  // Sort items
+  if (sortBy === 'price-low') {
+    filteredItems = filteredItems.sort((a, b) => a.price - b.price);
+  } else if (sortBy === 'price-high') {
+    filteredItems = filteredItems.sort((a, b) => b.price - a.price);
+  } else if (sortBy === 'rating') {
+    filteredItems = filteredItems.sort((a, b) => b.rating - a.rating);
+  } else if (sortBy === 'special') {
+    filteredItems = filteredItems.sort((a, b) => (b.isSpecial ? 1 : 0) - (a.isSpecial ? 1 : 0));
+  }
 
   const renderSpiceLevel = (level: number) => {
     return '🌶️'.repeat(level);
@@ -334,6 +353,11 @@ const FoodCategories = () => {
     navigate(`/food/${itemId}`);
   };
 
+  const getCartItemQuantity = (itemId: number) => {
+    const cartItem = cart.find(item => item.id === itemId);
+    return cartItem?.quantity || 0;
+  };
+
   return (
     <section id="menu" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -346,17 +370,56 @@ const FoodCategories = () => {
           </p>
         </div>
 
+        {/* Search and Filters */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              placeholder="Search dishes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 bg-white border-gray-200 focus:border-chugal-green"
+            />
+          </div>
+          
+          <div className="flex gap-2">
+            <Select value={dietFilter} onValueChange={setDietFilter}>
+              <SelectTrigger className="w-32 bg-white border-gray-200">
+                <SelectValue placeholder="Diet" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg">
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="veg">🌱 Veg</SelectItem>
+                <SelectItem value="nonveg">🍗 Non-Veg</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-36 bg-white border-gray-200">
+                <SelectValue placeholder="Sort by" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-200 shadow-lg">
+                <SelectItem value="featured">Featured</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
+                <SelectItem value="rating">Top Rated</SelectItem>
+                <SelectItem value="special">Chef's Special</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((category) => (
             <Button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
               className={`${
                 activeCategory === category.id
-                  ? 'bg-chugal-red text-white'
-                  : 'bg-white text-gray-900 hover:bg-gray-100'
-              } px-6 py-2 rounded-full font-semibold transition-colors`}
+                  ? 'bg-chugal-red text-white shadow-lg'
+                  : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+              } px-4 py-2 rounded-full font-medium transition-all duration-200 hover:shadow-md`}
             >
               {category.emoji} {category.name}
             </Button>
@@ -367,13 +430,12 @@ const FoodCategories = () => {
         <div className="block md:hidden mb-8">
           <Carousel className="w-full">
             <CarouselContent className="-ml-2 md:-ml-4">
-              {filteredItems.map((item, index) => {
-                const cartItem = cart.find(cartItem => cartItem.id === item.id);
-                const quantity = cartItem?.quantity || 0;
+              {filteredItems.map((item) => {
+                const quantity = getCartItemQuantity(item.id);
 
                 return (
                   <CarouselItem key={item.id} className="pl-2 md:pl-4 basis-4/5">
-                    <Card className="overflow-hidden hover:shadow-2xl transition-all duration-300 border-0 shadow-lg">
+                    <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 bg-white border border-gray-100">
                       <div 
                         className="relative cursor-pointer"
                         onClick={() => handleFoodClick(item.id)}
@@ -384,16 +446,20 @@ const FoodCategories = () => {
                           className="w-full h-40 object-cover"
                         />
                         {item.isSpecial && (
-                          <div className="absolute top-2 left-2 bg-chugal-red text-white px-2 py-1 rounded-full text-xs font-semibold">
+                          <Badge className="absolute top-2 left-2 bg-chugal-red text-white font-semibold">
                             ⭐ Special
-                          </div>
+                          </Badge>
                         )}
-                        <div className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-lg">
+                        <Badge 
+                          className={`absolute top-2 right-2 ${
+                            item.isVeg ? 'bg-green-500' : 'bg-red-500'
+                          } text-white`}
+                        >
                           {item.isVeg ? '🌱' : '🍗'}
-                        </div>
+                        </Badge>
                       </div>
                       
-                      <CardContent className="p-4">
+                      <CardContent className="p-4 bg-white">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
                           <span className="text-lg font-bold text-chugal-red">₹{item.price}</span>
@@ -412,7 +478,7 @@ const FoodCategories = () => {
                               <Button
                                 variant="outline"
                                 size="icon"
-                                className="h-8 w-8"
+                                className="h-8 w-8 border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   updateQuantity(item.id, quantity - 1);
@@ -420,11 +486,11 @@ const FoodCategories = () => {
                               >
                                 <Minus className="h-3 w-3" />
                               </Button>
-                              <span className="font-semibold">{quantity}</span>
+                              <span className="font-semibold text-gray-900">{quantity}</span>
                               <Button
                                 variant="outline"
                                 size="icon"
-                                className="h-8 w-8"
+                                className="h-8 w-8 border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   updateQuantity(item.id, quantity + 1);
@@ -437,7 +503,7 @@ const FoodCategories = () => {
                           </div>
                         ) : (
                           <Button 
-                            className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-2 text-sm"
+                            className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-2 text-sm transition-all duration-200"
                             onClick={(e) => {
                               e.stopPropagation();
                               addToCart(item);
@@ -453,43 +519,46 @@ const FoodCategories = () => {
                 );
               })}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white" />
+            <CarouselNext className="border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white" />
           </Carousel>
         </div>
 
         {/* Desktop Grid View */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="hidden md:grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredItems.map((item, index) => {
-            const cartItem = cart.find(cartItem => cartItem.id === item.id);
-            const quantity = cartItem?.quantity || 0;
+            const quantity = getCartItemQuantity(item.id);
 
             return (
               <Card 
                 key={item.id} 
-                className="overflow-hidden hover:shadow-2xl transition-all duration-300 hover-scale animate-fade-in border-0 shadow-lg"
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white border border-gray-100 animate-fade-in"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div 
-                  className="relative cursor-pointer"
+                  className="relative cursor-pointer group"
                   onClick={() => handleFoodClick(item.id)}
                 >
                   <img 
                     src={item.image} 
                     alt={item.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   {item.isSpecial && (
-                    <div className="absolute top-4 left-4 bg-chugal-red text-white px-3 py-1 rounded-full text-sm font-semibold animate-bounce-in">
+                    <Badge className="absolute top-4 left-4 bg-chugal-red text-white font-semibold animate-pulse">
                       ⭐ Chef's Special
-                    </div>
+                    </Badge>
                   )}
-                  <div className="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg">
-                    {item.isVeg ? '🌱' : '🍗'}
-                  </div>
+                  <Badge 
+                    className={`absolute top-4 right-4 ${
+                      item.isVeg ? 'bg-green-500' : 'bg-red-500'
+                    } text-white font-medium`}
+                  >
+                    {item.isVeg ? '🌱 Veg' : '🍗 Non-Veg'}
+                  </Badge>
                 </div>
                 
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-white">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-xl font-bold text-gray-900">{item.name}</h3>
                     <span className="text-2xl font-bold text-chugal-red">₹{item.price}</span>
@@ -503,14 +572,10 @@ const FoodCategories = () => {
                   <p className="text-gray-700 mb-4 text-sm leading-relaxed">{item.description}</p>
                   
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center">
-                      {item.isVeg ? (
-                        <span className="text-green-600 font-semibold">Veg</span>
-                      ) : (
-                        <span className="text-red-600 font-semibold">Non-veg</span>
-                      )}
-                      <div className="ml-4 flex items-center">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center">
                         {renderSpiceLevel(item.spiceLevel)}
+                        {item.spiceLevel === 0 && <span className="text-gray-400 text-sm">Mild</span>}
                       </div>
                     </div>
                   </div>
@@ -521,6 +586,7 @@ const FoodCategories = () => {
                         <Button
                           variant="outline"
                           size="icon"
+                          className="border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
                             updateQuantity(item.id, quantity - 1);
@@ -528,10 +594,11 @@ const FoodCategories = () => {
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="font-semibold text-lg">{quantity}</span>
+                        <span className="font-semibold text-lg text-gray-900">{quantity}</span>
                         <Button
                           variant="outline"
                           size="icon"
+                          className="border-chugal-green text-chugal-green hover:bg-chugal-green hover:text-white transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
                             updateQuantity(item.id, quantity + 1);
@@ -544,7 +611,7 @@ const FoodCategories = () => {
                     </div>
                   ) : (
                     <Button 
-                      className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-3 transition-all duration-300"
+                      className="w-full bg-chugal-green hover:bg-chugal-darkGreen text-white font-semibold py-3 transition-all duration-200 hover:shadow-lg"
                       onClick={(e) => {
                         e.stopPropagation();
                         addToCart(item);
@@ -560,9 +627,18 @@ const FoodCategories = () => {
           })}
         </div>
 
+        {/* No Results Message */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-16">
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-2xl font-bold text-gray-800 mb-2">No dishes found</h3>
+            <p className="text-gray-600">Try adjusting your search or filters</p>
+          </div>
+        )}
+
         {/* Chat Bubble with Fun Fact */}
         <div className="mt-16 flex justify-center">
-          <div className="chat-bubble max-w-md animate-fade-in">
+          <div className="chat-bubble max-w-md animate-fade-in bg-white shadow-lg">
             <p className="text-gray-700">
               💡 <strong>Fun Fact:</strong> Did you know that our "Gossip Burger" was inspired by 
               Mrs. Sharma's weekly kitty party stories? True story! 😄
