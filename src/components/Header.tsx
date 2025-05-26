@@ -57,11 +57,15 @@ const Header = () => {
         <nav className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-2 cursor-pointer" onClick={() => scrollToSection('home')}>
+            <div className="flex items-center space-x-3 cursor-pointer" onClick={() => scrollToSection('home')}>
+              <img 
+                src="/lovable-uploads/b09b92a4-12e0-431a-80cf-1cca5685ee33.png" 
+                alt="Chugalkhors Logo" 
+                className="h-12 w-auto hover:scale-105 transition-transform"
+              />
               <span className="text-2xl md:text-3xl font-bold text-chugal-red hover:scale-105 transition-transform">
                 Chugalkhors
               </span>
-              <span className="text-xl md:text-2xl animate-bounce">🍲</span>
             </div>
 
             {/* Desktop Navigation */}
