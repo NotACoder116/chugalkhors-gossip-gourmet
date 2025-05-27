@@ -10,23 +10,9 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    watch: {
-      usePolling: true,
-      ignored: ['**/node_modules/**', '**/dist/**']
-    },
-    fs: {
-      strict: false,
-    },
-    hmr: {
-      overlay: true,
-      port: 24678,
-    },
   },
   plugins: [
-    react({
-      // Enable fast refresh for better development experience
-      include: "**/*.{jsx,tsx}",
-    }),
+    react(),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -34,13 +20,5 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  },
-  // Ensure proper file extensions are resolved
-  optimizeDeps: {
-    include: ['react', 'react-dom'],
-  },
-  // Enable source maps for better debugging
-  build: {
-    sourcemap: mode === 'development',
   },
 }));
