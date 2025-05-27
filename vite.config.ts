@@ -1,3 +1,4 @@
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -10,17 +11,22 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     watch: {
-      usePolling: true, // Forces file change detection
+      usePolling: true,
+      ignored: ['**/node_modules/**', '**/dist/**']
     },
     fs: {
       strict: false,
     },
     hmr: {
       overlay: true,
+      port: 24678,
     },
   },
   plugins: [
-    react(),
+    react({
+      // Enable fast refresh for better development experience
+      include: "**/*.{jsx,tsx}",
+    }),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -28,5 +34,13 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  // Ensure proper file extensions are resolved
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
+  // Enable source maps for better debugging
+  build: {
+    sourcemap: mode === 'development',
   },
 }));
